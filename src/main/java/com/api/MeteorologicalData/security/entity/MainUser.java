@@ -15,7 +15,7 @@ public class MainUser implements UserDetails {
     private String username;
     private String password;
 
-    public static MainUser build(User user){
+    public static MainUser build(User user) {
         return new MainUser(user.getName(), user.getEmail(), user.getUsername(), user.getPassword());
     }
 

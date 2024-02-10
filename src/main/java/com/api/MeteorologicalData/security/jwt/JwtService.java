@@ -23,11 +23,11 @@ public class JwtService {
     @Value("${security.jwt.expiration-minutes}")
     private long EXPIRATION_MINUTES;
 
-    public String getToken(UserDetails user){
+    public String getToken(UserDetails user) {
         return getToken(new HashMap<>(), user);
     }
 
-    private <K, V> String getToken(HashMap<String,Object> extraClaims, UserDetails user) {
+    private <K, V> String getToken(HashMap<String, Object> extraClaims, UserDetails user) {
         Date issuedAt = new Date(System.currentTimeMillis());
         Date expiration = new Date(issuedAt.getTime() + (EXPIRATION_MINUTES * 60 * 1000));
         return Jwts.builder()
@@ -46,16 +46,16 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String getUsernameFromToken(String token){
+    public String getUsernameFromToken(String token) {
         return getClaim(token, Claims::getSubject);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username=getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername())&& !isTokenExpired(token));
+        final String username = getUsernameFromToken(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    private <T> T getClaim(String token, Function<Claims,T> claimsResolver) {
+    private <T> T getClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClamims(token);
         return claimsResolver.apply(claims);
     }
@@ -69,11 +69,11 @@ public class JwtService {
                 .getBody();
     }
 
-    private Date getExpiration(String token){
+    private Date getExpiration(String token) {
         return getClaim(token, Claims::getExpiration);
     }
 
-    private boolean isTokenExpired(String token){
+    private boolean isTokenExpired(String token) {
         return getExpiration(token).before(new Date());
     }
 }
