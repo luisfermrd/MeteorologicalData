@@ -55,21 +55,21 @@ public class ApiController {
     public ResponseEntity<?> location(@PathVariable("city") String city) {
         this.authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        if (this.limit(username)) {
-            if (this.bucket.tryConsume(1)) {
+        if (this.bucket.tryConsume(1)) {
+            if (this.limit(username)) {
                 return new ResponseEntity<LocationData[]>(apiService.findCity(city), HttpStatus.OK);
             }
-            return new ResponseEntity<Message>(Message.builder().message("Request limit on server exceeded. Try it again later.").build(), HttpStatus.TOO_MANY_REQUESTS);
+            return new ResponseEntity<Message>(Message.builder().message("Request limit exceeded, try again later.").build(), HttpStatus.TOO_MANY_REQUESTS);
         }
-        return new ResponseEntity<Message>(Message.builder().message("Request limit exceeded, try again later.").build(), HttpStatus.TOO_MANY_REQUESTS);
+        return new ResponseEntity<Message>(Message.builder().message("Request limit on server exceeded. Try it again later.").build(), HttpStatus.TOO_MANY_REQUESTS);
     }
 
     @GetMapping("/weather/{city}")
     public ResponseEntity<?> currentWeather(@PathVariable("city") String city) {
         this.authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        if (this.limit(username)) {
-            if (this.bucket.tryConsume(1)) {
+        if (this.bucket.tryConsume(1)) {
+            if (this.limit(username)) {
                 LocationData[] cityData = apiService.findCity(city);
                 if (cityData == null || cityData.length == 0) {
                     Message message = Message.builder().message("City {" + city + "} not found").build();
@@ -80,17 +80,17 @@ public class ApiController {
                 this.performAudit(currentWeather, ApiType.CURRENT_WEATHER.getDisplayName(), username);
                 return new ResponseEntity<CurrentWeather>(currentWeather, HttpStatus.OK);
             }
-            return new ResponseEntity<Message>(Message.builder().message("Request limit on server exceeded. Try it again later.").build(), HttpStatus.TOO_MANY_REQUESTS);
+            return new ResponseEntity<Message>(Message.builder().message("Request limit exceeded, try again later.").build(), HttpStatus.TOO_MANY_REQUESTS);
         }
-        return new ResponseEntity<Message>(Message.builder().message("Request limit exceeded, try again later.").build(), HttpStatus.TOO_MANY_REQUESTS);
+        return new ResponseEntity<Message>(Message.builder().message("Request limit on server exceeded. Try it again later.").build(), HttpStatus.TOO_MANY_REQUESTS);
     }
 
     @GetMapping("/forecast/{city}")
     public ResponseEntity<?> forecast(@PathVariable("city") String city) {
         this.authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        if (this.limit(username)) {
-            if (this.bucket.tryConsume(1)) {
+        if (this.bucket.tryConsume(1)) {
+            if (this.limit(username)) {
                 LocationData[] cityData = apiService.findCity(city);
                 if (cityData == null || cityData.length == 0) {
                     Message message = Message.builder().message("City {" + city + "} not found").build();
@@ -101,9 +101,9 @@ public class ApiController {
                 this.performAudit(forecast, ApiType.FORECAST.getDisplayName(), username);
                 return new ResponseEntity<Forecast>(forecast, HttpStatus.OK);
             }
-            return new ResponseEntity<Message>(Message.builder().message("Request limit on server exceeded. Try it again later.").build(), HttpStatus.TOO_MANY_REQUESTS);
+            return new ResponseEntity<Message>(Message.builder().message("Request limit exceeded, try again later.").build(), HttpStatus.TOO_MANY_REQUESTS);
         }
-        return new ResponseEntity<Message>(Message.builder().message("Request limit exceeded, try again later.").build(), HttpStatus.TOO_MANY_REQUESTS);
+        return new ResponseEntity<Message>(Message.builder().message("Request limit on server exceeded. Try it again later.").build(), HttpStatus.TOO_MANY_REQUESTS);
 
     }
 
@@ -111,8 +111,8 @@ public class ApiController {
     public ResponseEntity<?> airPollution(@PathVariable("city") String city) {
         this.authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        if (this.limit(username)) {
-            if (this.bucket.tryConsume(1)) {
+        if (this.bucket.tryConsume(1)) {
+            if (this.limit(username)) {
                 LocationData[] cityData = apiService.findCity(city);
                 if (cityData == null || cityData.length == 0) {
                     Message message = Message.builder().message("City {" + city + "} not found").build();
@@ -123,9 +123,9 @@ public class ApiController {
                 this.performAudit(airPollution, ApiType.AIR_POLLUTION.getDisplayName(), username);
                 return new ResponseEntity<AirPollution>(airPollution, HttpStatus.OK);
             }
-            return new ResponseEntity<Message>(Message.builder().message("Request limit on server exceeded. Try it again later.").build(), HttpStatus.TOO_MANY_REQUESTS);
+            return new ResponseEntity<Message>(Message.builder().message("Request limit exceeded, try again later.").build(), HttpStatus.TOO_MANY_REQUESTS);
         }
-        return new ResponseEntity<Message>(Message.builder().message("Request limit exceeded, try again later.").build(), HttpStatus.TOO_MANY_REQUESTS);
+        return new ResponseEntity<Message>(Message.builder().message("Request limit on server exceeded. Try it again later.").build(), HttpStatus.TOO_MANY_REQUESTS);
 
     }
 
