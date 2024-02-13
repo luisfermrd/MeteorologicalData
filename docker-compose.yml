@@ -1,20 +1,25 @@
 version: '3.8'
+networks:
+  api-network:
+    driver: bridge
 
 services:
-  mysql:
-    image: mysql:8.0
+  mysql_db:
+    image: mysql:latest
+    restart: unless-stopped
     container_name: mysql-container
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: meteorologicalDataDb
+    networks:
+      - api-network
 
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  app_api:
+    build: .
+    restart: on-failure
     container_name: myapp-container
     depends_on:
-      - mysql
+      - mysql_db
     environment:
       MYSQL_HOST: mysql_db
       MYSQL_DATABASE: meteorologicalDataDb
@@ -22,3 +27,5 @@ services:
       MYSQL_PASSWORD: root
     ports:
       - "8080:8080"
+    networks:
+      - api-network

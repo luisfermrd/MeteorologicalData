@@ -113,7 +113,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<finalName>meteorologicalData</finalName>
+		<finalName>api</finalName>
 	</build>
 
 </project>

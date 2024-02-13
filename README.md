@@ -20,145 +20,339 @@ ciudades.
 1. [Requisitos](#requisitos)
 2. [Configuración](#configuración)
 3. [Ejecución](#ejecución)
-4. [Endpoints de la API](#endpoints-de-la-api)
-5. [Autenticación y Autorización](#autenticación-y-autorización)
-6. [Almacenamiento en Base de Datos](#almacenamiento-en-base-de-datos)
+4. [Autenticación y Autorización](#autenticación-y-autorización)
+5. [Endpoints de la API](#endpoints-de-la-api)
+6. [Detener servicios](#detener-servicios)
 7. [Limitación de Tasa de la API](#limitación-de-tasa-de-la-api)
-8. [Pruebas y Validación](#pruebas-y-validación)
-9. [Contenerización](#contenerización)
-10. [Auditoría y Registro](#auditoría-y-registro)
-11. [Documentación Automática con Swagger](#documentación-automática-con-swagger)
-12. [Contribución](#contribución)
-13. [Licencia](#licencia)
+8. [Auditoría y Registro](#auditoría-y-registro)
+9. [Documentación Automática con Swagger](#documentación-automática-con-swagger)
 
 ## Requisitos
 
-Lista de requisitos previos para configurar y ejecutar el proyecto.
+Para ejecutar este proyecto, tienes dos opciones. Dependiendo de tus 
+necesidades, deberás tener [Docker](https://www.docker.com) instalado. Si no deseas usar Docker, 
+deberás tener una base de datos MySQL de forma local como mínimo. 
+De igual manera, se necesita [Maven](https://maven.apache.org) para la compilación del proyecto.
 
 ## Configuración
 
-Instrucciones detalladas sobre cómo configurar el proyecto. Esto puede incluir configuraciones de base de datos, credenciales, etc.
+Como primer paso, debemos abrir una terminal y ubicarnos en la raíz de 
+nuestro proyecto para ejecutar el siguiente comando, para construir el proyecto.
+Si no deseas usar Docker, deberás tener un servicio de MySQL disponible
+en tu ordenador, crear la base de datos `meteorologicalDataDb`, y
+configurar en el archivo `application.properties` el usuario y
+contraseña correspondientes.
+
+````shell
+mvn clean install
+````
+Si vamos a utilizar Docker, el siguiente paso sería construir nuestras 
+imágenes para luego levantar los servicios. Esto lo haremos ejecutando el 
+siguiente comando. (Si estás usando Linux, deberás descargar Docker Compose).
+
+````shell
+ docker-compose build
+````
 
 ## Ejecución
 
-Pasos para ejecutar el proyecto. Puede incluir comandos de terminal o configuraciones específicas.
+La ejecución es tan simple como ejecutar el siguiente comando, 
+si estás usando Docker.
+
+````shell
+docker-compose up
+````
+
+Los servicios se pueden ejecutar en segundo plano con el comando:
+
+````shell
+docker-compose up -d
+````
+
+Para los que no van a usar Docker, pueden ejecutar el 
+siguiente comando.
+
+````shell
+mvn spring-boot:run
+````
 
 ## Autenticación y Autorización
 
-Luego de haber levantado el servidor y configurado la base de datos,
-podemos proceder a registrarnos en nuestra aplicacion enviando una peticion
-al siguiente endpoint.
+Luego de haber levantado el servidor y configurado la base de datos, 
+podemos proceder a registrarnos en nuestra aplicación enviando una 
+petición al siguiente endpoint.
 
-```url
+
+````http request
 localhost:8080/auth/register
-```
+````
 
-Los datos se deben enviar en el cuerpo de la peticion en formato json
-con la siguiente estructura
+Los datos se deben enviar en el cuerpo de la petición en formato JSON 
+con la siguiente estructura:
 
-```json
+````json lines
 {
   "email": "user@correo.com",
   "name": "user",
   "username": "username",
   "password": "password"
 }
-```
+````
 
-Si todo sale bien recibiras el sigueinte mensaje:
+Si todo sale bien, recibirás el siguiente mensaje:
 
-```json
+````json lines
+{
+    "message": "Registered user successfully"
+}
+````
 
-```
+El siguiente paso será obtener el token de autenticación, 
+para lo cual debemos hacer una petición a la siguiente URL:
+
+````http request
+localhost:8080/auth/login
+````
+
+Con los siguientes datos:
+
+````json lines
+{
+    "username":"username",
+    "password":"password"
+}
+````
+
+Si todo sale bien, obtendrás una respuesta con el token:
+
+````json lines
+{
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTcwNzg0NzQxMSwiZXhwIjoxNzA3ODUxMDExfQ.ybs5qcd4m0QuXBMZv2oL3c0EymURSjYeTnQ2DLODQ_A",
+  "message": "Successful login"
+}
+````
 
 ## Endpoints de la API
 
-Detalles sobre cómo se maneja la autenticación y autorización. Incluye cómo obtener tokens JWT y restricciones de acceso.
+Recuerda que debes estar autorizado para solicitar información a los 
+endpoints, por lo que deberás enviar el token en la cabecera de la 
+solicitud, en una autorización de tipo `Bearer Token`.
 
-## Almacenamiento en Base de Datos
+- ### Clima actual
 
-Explicación de la elección de la base de datos, estructura de tablas y ejemplos de consultas SQL.
+El clima actual lo podrás obtener mediante el siguiente endpoint, donde 
+deberás reemplazar {ciudad} por el nombre de la ciudad que estés buscando.
+
+````http request
+localhost:8080/api/weather/{ciudad}
+````
+Si buscamos London, obtendremos un resultado similar al siguiente:
+
+````json lines
+{
+  "base": "stations",
+  "clouds": {
+    "all": 100
+  },
+  "cod": 200,
+  "coord": {
+    "lat": 51.5073,
+    "lon": -0.1276
+  },
+  "dt": 1707847772,
+  "id": 2643743,
+  "main": {
+    "humidity": 93,
+    "pressure": 1008,
+    "temp": 283.27,
+    "feels_like": 282.77,
+    "temp_max": 284.43,
+    "temp_min": 281.98
+  },
+  "name": "London",
+  "rain": null,
+  "sys": {
+    "country": "GB",
+    "id": 2075535,
+    "sunrise": 1707808778,
+    "sunset": 1707844202,
+    "type": 2
+  },
+  "timezone": 0,
+  "visibility": 10000,
+  "weather": [
+    {
+      "description": "overcast clouds",
+      "icon": "04n",
+      "id": 804,
+      "main": "Clouds"
+    }
+  ],
+  "wind": {
+    "deg": 200,
+    "speed": 5.14
+  }
+}
+````
+- ### Pronóstico del tiempo para los próximos 5 días.
+
+De igual forma, debes hacer una solicitud al siguiente endpoint:
+
+````http request
+localhost:8080/api/forecast/{ciudad}
+````
+Y obtendremos una respuesta como la siguiente (La llave `list` contiene más
+objetos, pero en este ejemplo solo se ha limitado a 1):
+
+````json lines
+{
+    "cod": "200",
+    "message": 0,
+    "cnt": 40,
+    "list": [
+        {
+            "dt": 1707858000,
+            "main": {
+                "temp": 283.64,
+                "feels_like": 283.12,
+                "temp_min": 283.64,
+                "temp_max": 284.06,
+                "pressure": 1009,
+                "sea_level": 1009,
+                "grnd_level": 1007,
+                "humidity": 91,
+                "temp_kf": -0.42
+            },
+            "weather": [
+                {
+                    "id": 500,
+                    "main": "Rain",
+                    "description": "light rain",
+                    "icon": "10n"
+                }
+            ],
+            "clouds": {
+                "all": 100
+            },
+            "wind": {
+                "speed": 5.7,
+                "deg": 226,
+                "gust": 14.3
+            },
+            "visibility": 10000,
+            "pop": 0.39,
+            "rain": {
+                "3h": 0.12
+            },
+            "sys": {
+                "pod": "n"
+            },
+            "dt_txt": "2024-02-13 21:00:00"
+        }
+    ],
+    "city": {
+        "id": 2643743,
+        "name": "London",
+        "coord": {
+            "lat": 51.5073,
+            "lon": -0.1276
+        },
+        "country": "GB",
+        "population": 1000000,
+        "timezone": 0,
+        "sunrise": 1707808778,
+        "sunset": 1707844202
+    }
+}
+````
+- ### Contaminación del aire actual
+
+De igual forma, debes hacer una solicitud al siguiente endpoint:
+
+````http request
+localhost:8080/api/air-pollution/{ciudad}
+````
+Y obtendremos una respuesta como la siguiente:
+
+````json lines
+{
+    "coord": {
+        "lon": -0.1276,
+        "lat": 51.5073
+    },
+    "list": [
+        {
+            "main": {
+                "aqi": 1
+            },
+            "components": {
+                "co": 263.69,
+                "no": 0,
+                "no2": 23.31,
+                "o3": 50.78,
+                "so2": 7.75,
+                "pm2_5": 2.28,
+                "pm10": 2.51,
+                "nh3": 0.38
+            },
+            "dt": 1707848911
+        }
+    ]
+}
+````
+## Detener servicios
+
+Si usaste Docker para probar esta aplicación, podrás detener los
+contenedores en ejecución de forma muy sencilla con el siguiente comando:
+
+````shell
+docker compose down
+````
+
+Si necesita detener y eliminar todos los contenedores, redes y todas las 
+imágenes utilizadas por cualquier servicio en el archivo docker-compose.yml, 
+use el comando:
+
+````shell
+docker compose down --rmi all
+````
+
+Si no estás usando Docker, bastará con presionar `Ctrl + C` en la terminal
+que se esta ejecutando el servicio para detenerlo.
 
 ## Limitación de Tasa de la API
 
-Información sobre cómo se implementa la limitación de tasa en la API, con detalles sobre los límites.
-
-## Pruebas y Validación
-
-Instrucciones para ejecutar las pruebas unitarias y verificar la funcionalidad.
-
-## Contenerización
-
-Pasos para construir y ejecutar el contenedor Docker.
+Si bien es conveniente utilizar este servicio, es importante tener en cuenta las
+limitaciones tanto del servidor como del usuario. El servidor tiene un límite de 1000
+peticiones al día, mientras que el usuario está limitado a 100 peticiones por hora. 
+Estas restricciones se han establecido con el fin de evitar posibles errores debidos 
+al consumo excesivo de la API externa. Además, estas limitaciones contribuyen a 
+mantener el correcto funcionamiento del servidor y a prevenir posibles colapsos debido
+a un uso excesivo.
 
 ## Auditoría y Registro
 
-Explicación de cómo se registran las solicitudes y respuestas para fines de auditoría.
+Con fines de auditoría, todas las solicitudes realizadas por los usuarios se registrarán
+en la base de datos. Los datos registrados incluirán:
+
+- Nombre del usuario que realizó la petición.
+- Fecha y hora de la petición.
+- Tipo de petición realizada.
+- Respuesta obtenida por parte del servidor.
+
+Estos datos estarán disponibles únicamente al revisar la tabla correspondiente en la base de datos, 
+garantizando la trazabilidad y transparencia en el uso del sistema.
 
 ## Documentación Automática con Swagger
 
-Enlace y descripción de la documentación generada automáticamente por Swagger.
+Para acceder a la documentación que automáticamente genera Swagger de los endpoints de la API,
+mientras nuestro servicio aún esté en ejecución, podemos ingresar en nuestro navegador a la siguiente URL:
 
-## Contribución
+````http request
+localhost:8080/swagger-ui.html
+````
+Esto nos redireccionará a la página donde se encuentra toda la documentación 
+con el fin de entender mejor cómo funciona nuestra aplicación.
 
-Instrucciones sobre cómo contribuir al proyecto.
 
-## Licencia
 
-Detalles sobre la licencia del proyecto.
-
-# Título 1
-
-## Título 2
-
-### Título 3
-
-#### Título 4
-
-##### Título 5
-
-###### Título 6
-
-**Texto en negrita**
-_Texto en cursiva_
-
-- Elemento 1
-- Elemento 2
-  - Elemento anidado
-- Elemento 3
-
-1. Primer elemento
-2. Segundo elemento
-3. Tercer elemento
-   [Texto del enlace](URL)
-   ![Texto alternativo](URL_de_la_imagen)
-   > Esto es una cita.
-
-```java
-public class Ejemplo {
-    public static void main(String[] args) {
-        System.out.println("Hola, mundo!");
-    }
-}
-```
-
-## `Código en línea`
-
----
-
-| Encabezado 1 | Encabezado 2 |
-| ------------ | ------------ |
-| Celda 1,1    | Celda 1,2    |
-| Celda 2,1    | Celda 2,2    |
-
-```sql
-SELECT * FROM employess;
-```
-
-```java
-public class Ejemplo {
-    public static void main(String[] args) {
-        System.out.println("Hola, mundo!");
-    }
-}
-```
