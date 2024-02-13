@@ -26,24 +26,17 @@ import static org.mockito.Mockito.when;
 @WebAppConfiguration
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ApiControllerTest {
-
     private final static String BASE_URL = "/api";
     private MockMvc mockMvc;
-
     @Autowired
     private WebApplicationContext webApplicationContext;
-
     @Autowired
     PasswordEncoder passwordEncoder;
-
     @MockBean
     private UserRepository userRepository;
-
     @MockBean
     private AuditRepository auditRepository;
-
     private final String city = "Bogota";
-
     @BeforeEach
     void setUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();

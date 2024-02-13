@@ -32,30 +32,26 @@ public class ApiService {
 
     @Cacheable(value = "findCity", key = "#city")
     public LocationData[] findCity(String city) {
-        LocationData[] locationData = this.restTemplate.getForObject(this.urlToSearchCity(city), LocationData[].class);
-        log.info("Datos de la ciudad {} obtenidos de la api", locationData);
-        return locationData;
+        return this.restTemplate.getForObject(this.urlToSearchCity(city), LocationData[].class);
+//        log.info("Datos de la ciudad {} obtenidos de la api", locationData);
     }
 
     @Cacheable(value = "currentWeather", key = "#city")
     public CurrentWeather currentWeather(String city, LocationData locationData) {
-        CurrentWeather currentWeather = this.restTemplate.getForObject(this.urlToSearchData(locationData, "weather"), CurrentWeather.class);
-        log.info("Datos de currentWeather {} obtenidos de la api", currentWeather);
-        return currentWeather;
+        return this.restTemplate.getForObject(this.urlToSearchData(locationData, "weather"), CurrentWeather.class);
+//        log.info("Datos de currentWeather {} obtenidos de la api", currentWeather);
     }
 
     @Cacheable(value = "forecast", key = "#city")
     public Forecast forecast(String city, LocationData locationData) {
-        Forecast forecast = this.restTemplate.getForObject(this.urlToSearchData(locationData, "forecast"), Forecast.class);
-        log.info("Datos de forecast {} obtenidos de la api", forecast);
-        return forecast;
+        return this.restTemplate.getForObject(this.urlToSearchData(locationData, "forecast"), Forecast.class);
+//        log.info("Datos de forecast {} obtenidos de la api", forecast);
     }
 
     @Cacheable(value = "airPollution", key = "#city")
     public AirPollution airPollution(String city, LocationData locationData) {
-        AirPollution airPollution = this.restTemplate.getForObject(this.urlToSearchData(locationData, "air_pollution"), AirPollution.class);
-        log.info("Datos de airPollution {} obtenidos de la api", airPollution);
-        return airPollution;
+        return this.restTemplate.getForObject(this.urlToSearchData(locationData, "air_pollution"), AirPollution.class);
+//        log.info("Datos de airPollution {} obtenidos de la api", airPollution);
     }
 
     private String urlToSearchCity(String city) {

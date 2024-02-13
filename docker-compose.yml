@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: meteorologicalDataDb
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myapp-container
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_HOST: mysql_db
+      MYSQL_DATABASE: meteorologicalDataDb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    ports:
+      - "8080:8080"
