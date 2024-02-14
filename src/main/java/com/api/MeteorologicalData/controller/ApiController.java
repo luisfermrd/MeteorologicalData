@@ -15,6 +15,7 @@ import com.api.MeteorologicalData.util.ApiType;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.bucket4j.Bucket;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 
 @Slf4j
+@SecurityRequirement(name = "Authorization")
 @RestController
 @RequestMapping("/api")
 public class ApiController {

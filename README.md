@@ -354,5 +354,8 @@ localhost:8080/swagger-ui.html
 Esto nos redireccionará a la página donde se encuentra toda la documentación 
 con el fin de entender mejor cómo funciona nuestra aplicación.
 
-
-
+Si deseas probar los endpoints en esta sección para los cuales necesitas 
+autorización, primero deberás obtener el `token` (si no tienes uno disponible ya) 
+en el endpoint de inicio de sesión. En la parte superior derecha estará un 
+botón llamado `Authorize`, donde deberás suministrar el `token` para poder utilizar 
+los endpoints protegidos.
