@@ -4,17 +4,56 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Main weather data for the current day.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Main {
+
+    /**
+     * Temperature.
+     */
     private double temp;
-    private double feels_like;
-    private double temp_min;
-    private double temp_max;
+
+    /**
+     * Temperature.
+     */
+    private double feelsLike;
+
+    /**
+     * Minimum temperature.
+     */
+    private double tempMin;
+
+    /**
+     * Maximum temperature.
+     */
+    private double tempMax;
+
+    /**
+     * Atmospheric pressure on the sea level, hPa.
+     */
     private long pressure;
-    private long sea_level;
-    private long grnd_level;
+
+    /**
+     * Atmospheric pressure on the sea level, hPa.
+     */
+    private long seaLevel;
+
+    /**
+     * Grnd level pressure, hPa.
+     */
+    private long grndLevel;
+
+    /**
+     * Humidity, %
+     */
     private long humidity;
-    private double temp_kf;
+
+    /**
+     * "Feels Like" temperature.
+     */
+    private double tempKf;
 }

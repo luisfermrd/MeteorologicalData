@@ -10,6 +10,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Configuration class for Spring Security.
+ */
 @Configuration
 public class HttpSecurityConfig {
 
@@ -19,12 +22,25 @@ public class HttpSecurityConfig {
 
     private final AuthenticationProvider authenticationProvider;
 
+    /**
+     * Constructor for the HttpSecurityConfig class.
+     *
+     * @param jwtAuthenticationFilter the JWT authentication filter
+     * @param jwtEntryPoint           the JWT entry point
+     * @param authenticationProvider  the authentication provider
+     */
     public HttpSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, JwtEntryPoint jwtEntryPoint, AuthenticationProvider authenticationProvider) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.jwtEntryPoint = jwtEntryPoint;
         this.authenticationProvider = authenticationProvider;
     }
 
+    /**
+     * Creates a SecurityFilterChain bean that contains the necessary security configuration for the application.
+     *
+     * @return the SecurityFilterChain bean
+     * @throws Exception if an error occurs while building the security filter chain
+     */
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http

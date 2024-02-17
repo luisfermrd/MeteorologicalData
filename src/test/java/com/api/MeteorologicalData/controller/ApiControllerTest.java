@@ -37,6 +37,10 @@ class ApiControllerTest {
     @MockBean
     private AuditRepository auditRepository;
     private final String city = "Bogota";
+
+    /**
+     * Sets up the mockMvc and mocks the necessary dependencies for the tests.
+     */
     @BeforeEach
     void setUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
@@ -47,6 +51,11 @@ class ApiControllerTest {
         when(userRepository.save(user)).thenReturn(user);
     }
 
+    /**
+     * Tests the location endpoint.
+     *
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     @Order(1)
     @WithMockUser
@@ -59,6 +68,11 @@ class ApiControllerTest {
         assertEquals(200, result.getResponse().getStatus());
     }
 
+    /**
+     * Tests the current weather endpoint.
+     *
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     @Order(2)
     @WithMockUser(value = "Username")
@@ -70,6 +84,11 @@ class ApiControllerTest {
         assertEquals(200, result.getResponse().getStatus());
     }
 
+    /**
+     * Tests the current weather endpoint with a city that does not exist.
+     *
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     @Order(3)
     @WithMockUser(value = "Username")
@@ -81,6 +100,11 @@ class ApiControllerTest {
         assertEquals(404, result.getResponse().getStatus());
     }
 
+    /**
+     * Tests the forecast endpoint.
+     *
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     @Order(4)
     @WithMockUser(value = "Username")
@@ -92,6 +116,11 @@ class ApiControllerTest {
         assertEquals(200, result.getResponse().getStatus());
     }
 
+    /**
+     * Tests the forecast endpoint with a city that does not exist.
+     *
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     @Order(5)
     @WithMockUser(value = "Username")
@@ -103,6 +132,11 @@ class ApiControllerTest {
         assertEquals(404, result.getResponse().getStatus());
     }
 
+    /**
+     * Tests the air pollution endpoint.
+     *
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     @Order(6)
     @WithMockUser(value = "Username")
@@ -114,6 +148,11 @@ class ApiControllerTest {
         assertEquals(200, result.getResponse().getStatus());
     }
 
+    /**
+     * Tests the air pollution endpoint with a city that does not exist.
+     *
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     @Order(7)
     @WithMockUser(value = "Username")
@@ -125,6 +164,11 @@ class ApiControllerTest {
         assertEquals(404, result.getResponse().getStatus());
     }
 
+    /**
+     * Tests the behavior when the user exceeds their request limit for the location endpoint.
+     *
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     @Order(8)
     @WithMockUser
@@ -140,6 +184,11 @@ class ApiControllerTest {
         assertEquals(429, result.getResponse().getStatus());
     }
 
+    /**
+     * Tests the behavior when the user exceeds their request limit for the current weather endpoint.
+     *
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     @Order(9)
     @WithMockUser(value = "Username")
@@ -151,8 +200,14 @@ class ApiControllerTest {
                     )
                     .andReturn();
         }
+        assertEquals(429, result.getResponse().getStatus());
     }
 
+    /**
+     * Tests the behavior when the user exceeds their request limit for the forecast endpoint.
+     *
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     @Order(10)
     @WithMockUser(value = "Username")
@@ -167,6 +222,11 @@ class ApiControllerTest {
         assertEquals(429, result.getResponse().getStatus());
     }
 
+    /**
+     * Tests the behavior when the user exceeds their request limit for the air pollution endpoint.
+     *
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     @Order(11)
     @WithMockUser(value = "Username")
@@ -181,7 +241,11 @@ class ApiControllerTest {
         assertEquals(429, result.getResponse().getStatus());
     }
 
-
+    /**
+     * Tests the behavior when the server exceeds its request limit for the location endpoint.
+     *
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     @Order(12)
     @WithMockUser
@@ -197,6 +261,11 @@ class ApiControllerTest {
         assertEquals(429, result.getResponse().getStatus());
     }
 
+    /**
+     * Tests the behavior when the server exceeds its request limit for the current weather endpoint.
+     *
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     @Order(13)
     @WithMockUser(value = "Username")
@@ -210,6 +279,11 @@ class ApiControllerTest {
         }
     }
 
+    /**
+     * Tests the behavior when the server exceeds its request limit for the forecast endpoint.
+     *
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     @Order(14)
     @WithMockUser(value = "Username")
@@ -224,6 +298,11 @@ class ApiControllerTest {
         assertEquals(429, result.getResponse().getStatus());
     }
 
+    /**
+     * Tests the behavior when the server exceeds its request limit for the air pollution endpoint.
+     *
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     @Order(15)
     @WithMockUser(value = "Username")

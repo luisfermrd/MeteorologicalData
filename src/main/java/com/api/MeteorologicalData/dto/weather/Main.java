@@ -5,17 +5,38 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Main weather data for the current day.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Main {
-    @JsonProperty("feels_like")
-    private double feelsLike;
-    private long humidity;
-    private long pressure;
+    /**
+     * Temperature in Celsius.
+     */
     private double temp;
-    @JsonProperty("temp_max")
-    private double tempMax;
+    /**
+     * Minimum temperature in Celsius.
+     */
     @JsonProperty("temp_min")
     private double tempMin;
+    /**
+     * Maximum temperature in Celsius.
+     */
+    @JsonProperty("temp_max")
+    private double tempMax;
+    /**
+     * Feels like temperature in Celsius.
+     */
+    @JsonProperty("feels_like")
+    private double feelsLike;
+    /**
+     * Atmospheric pressure (in hPa).
+     */
+    private long pressure;
+    /**
+     * Humidity (percentage).
+     */
+    private long humidity;
 }

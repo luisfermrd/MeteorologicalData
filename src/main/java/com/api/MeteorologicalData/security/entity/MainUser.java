@@ -7,6 +7,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+/**
+ * MainUser class is used to represent the user in the system.
+ * It contains the user's name, email, username, and password.
+ * The MainUser class implements the UserDetails interface, which provides the user's authentication information.
+ */
 @Data
 @AllArgsConstructor
 public class MainUser implements UserDetails {
@@ -15,6 +20,12 @@ public class MainUser implements UserDetails {
     private String username;
     private String password;
 
+    /**
+     * The build method creates a new MainUser instance based on the given User instance.
+     *
+     * @param user the User instance
+     * @return the MainUser instance
+     */
     public static MainUser build(User user) {
         return new MainUser(user.getName(), user.getEmail(), user.getUsername(), user.getPassword());
     }

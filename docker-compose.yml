@@ -25,6 +25,7 @@ services:
       MYSQL_DATABASE: meteorologicalDataDb
       MYSQL_USER: root
       MYSQL_PASSWORD: root
+      API_ID: ${API_ID}
     ports:
       - "8080:8080"
     networks:

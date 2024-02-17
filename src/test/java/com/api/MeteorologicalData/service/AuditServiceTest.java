@@ -4,6 +4,7 @@ import com.api.MeteorologicalData.entity.Audit;
 import com.api.MeteorologicalData.repository.AuditRepository;
 import com.api.MeteorologicalData.security.entity.User;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,6 +33,9 @@ class AuditServiceTest {
         when(this.auditRepository.save(this.audit)).thenReturn(this.audit);
     }
 
+    /**
+     * Tests the save method of the AuditService class.
+     */
     @Test
     void save() {
         this.auditService.save(this.audit);
